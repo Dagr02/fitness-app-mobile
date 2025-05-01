@@ -1,5 +1,4 @@
 import {useAuthSession} from "@/components/providers/AuthProvider";
-import Uuid from "expo-modules-core/src/uuid";
 import {ReactNode, useState} from "react";
 import {Button, Text, View, TextInput} from "react-native";
 import { router } from "expo-router";
