@@ -1,7 +1,9 @@
 import {useAuthSession} from "@/components/providers/AuthProvider";
+import {ProgramProvider} from '@/components/providers/ProgramProvider';
 import {Redirect, Stack} from 'expo-router';
 import {Text} from 'react-native';
 import {ReactNode} from "react";
+
 
 export default function RootLayout(): ReactNode {
   const {token, isLoading} = useAuthSession()
@@ -15,12 +17,14 @@ export default function RootLayout(): ReactNode {
   }
 
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false
-      }}
-    >
-      <Stack.Screen name="(tabs)" />
-    </Stack>
+     <ProgramProvider>
+        <Stack
+          screenOptions={{
+            headerShown: false
+          }}
+        >
+          <Stack.Screen name="(tabs)" />
+        </Stack>
+    </ProgramProvider>
   );
 }

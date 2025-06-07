@@ -32,7 +32,7 @@ export default function Login(): ReactNode {
               setError("Invalid login. Token missing.");
           }
       } catch(err){
-          console.error(err);
+
           setError("Login Error");
       }
 

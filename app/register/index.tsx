@@ -53,7 +53,10 @@ export default function Register() : ReactNode {
             />
 
             <TextInput
+                label="Email"
                 placeholder="Email"
+                autoCapitalize="none"
+                keyboardType="email-address"
                 value={email}
                 onChangeText={setEmail}
                 style={{ marginBottom: 10, width: 200, padding: 8, borderWidth: 1 }}
@@ -62,6 +65,7 @@ export default function Register() : ReactNode {
             <TextInput
                 placeholder="Password"
                 secureTextEntry
+                autoCapitalize="none"
                 value={password}
                 onChangeText={setPassword}
                 style={{ marginBottom: 10, width: 200, padding: 8, borderWidth: 1 }}

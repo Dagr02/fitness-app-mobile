@@ -1,6 +1,6 @@
 import {useAuthSession} from "@/components/providers/AuthProvider";
 import {useState} from "react";
-import {View, Text, Button} from "react-native";
+import {View, Text, Button, StyleSheet} from "react-native";
 
 export default function Index() {
   const {signOut, token} = useAuthSession()
@@ -15,26 +15,31 @@ export default function Index() {
   }
 
   return (
-    <View
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flex: 1,
-        backgroundColor: '#FFFFFF'
-      }}
-    >
-      <Text>Home</Text>
+    <View style={styles.container}>
+      <Text style={styles.text}>Home</Text>
       <Button title={"Logout"} onPress={logout}/>
       <View style={{
         paddingTop: 20
       }} />
-      <Text>Make an API call with the stored AUTH token</Text>
+      <Text style={styles.text}>Make an API call with the stored AUTH token</Text>
       <Button title={"Call API"} onPress={callApi} />
       {tokenInUi &&
-        <Text>{`Your API access token is ${tokenInUi}`}</Text>
+        <Text style={styles.text}>{`Your API access token is ${tokenInUi}`}</Text>
       }
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+    backgroundColor: '#25292e',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    color: '#fff',
+  },
+});

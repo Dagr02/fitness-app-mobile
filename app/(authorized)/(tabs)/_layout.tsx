@@ -24,15 +24,6 @@ export default function TabLayout() {
                 }}
             />
 
-            <Tabs.Screen name="nutrition" options={{
-                    title: 'Nutrition',
-                    tabBarIcon: ({color, focused}) => (
-                        <Ionicons name={focused ? 'fast-food-sharp' : 'fast-food-outline'} color={color} size={24} />
-                    ),
-
-                }}
-            />
-
             <Tabs.Screen name="training" options={{
                     title: 'Training',
                     tabBarIcon: ({color, focused}) => (
@@ -50,6 +41,5 @@ export default function TabLayout() {
                 }}
             />
         </Tabs>
-
     )
 }
