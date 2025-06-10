@@ -1,49 +1,39 @@
 import { useRouter } from 'expo-router';
 import React, { useState, useCallback } from 'react';
-import { View, TouchableOpacity, Text, ScrollView, StyleSheet, TextInput, Button, Alert } from 'react-native';
-import { useProgram } from '@/components/providers/ProgramProvider';
+import { View, Text, ScrollView, StyleSheet, TextInput, Button, Alert } from 'react-native';
+import { ProgramExercise, useProgram } from '@/components/providers/ProgramProvider';
 
 
 import api from '@/config/api';
 import WorkoutLogCard from '@/components/training/WorkoutLogCard';
 import ProgramMenu from '@/components/training/ProgramMenu';
 import CustomButton from '@/components/custom/CustomButton'
+import { useProgramActions } from '@/app/hooks/use-program-actions';
+
+type SetLog = {
+  reps?: string;   // or number, depending on what you store
+  weight?: string; // or number
+  [key: string]: any; // to allow other fields if needed
+};
+
 
 export default function ProgramScreen() {
   const { data, markNeedsRefresh } = useProgram();
   const router = useRouter();
 
-  const [logState, setLogState] = useState({});
+  const [logState, setLogState] = useState<{[exerciseId: number]: SetLog[]}>({});
   const [submitting, setSubmitting] = useState(false);
 
-  const handleDeleteProgram = useCallback( () => {
-      Alert.alert(
-          'Confirm Delete',
-          'Are you sure you want to delete this program?',
-          [
-              {text: 'Cancel', style: 'cancel'},
-              {
-                  text: 'Delete',
-                  style: 'destructive',
-                  onPress: async() => {
-                      try{
-                          await api.deleteData(`/programs/${data.program.id}`);
-                          Alert.alert('Deleted', 'Program deleted successfully');
-                          markNeedsRefresh();
-                          router.push('/(tabs)/training');
-                      }catch(err){
-                          Alert.alert('Error', 'Failed to delete program');
-                          console.error(err);
-                      }
-                  }
-
-              },
-          ]
-      );
-  }, [data.program.id, markNeedsRefresh, router]);
+  const {handleDeleteProgram, handleEditProgram} = useProgramActions(
+    data.program.id, markNeedsRefresh);
 
 
-  const handleSetChange = useCallback((exerciseId, setIndex, field, value) => {
+  const handleSetChange = useCallback((
+        exerciseId: number, 
+        setIndex: number, 
+        field: string, 
+        value: string | number,
+    ) => {
       setLogState(prev => {
             const existingSets = prev[exerciseId] || [];
             const updatedSets = [...existingSets];
@@ -65,8 +55,8 @@ export default function ProgramScreen() {
                 .map((set, i) => ({
                     programExerciseId: parseInt(exerciseId),
                     setNumber: i + 1,
-                    completedReps: parseInt(set.reps),
-                    weightUsed: parseFloat(set.weight),
+                    completedReps: parseInt(set.reps ?? '0'),
+                    weightUsed: parseFloat(set.weight ?? '0'),
                     workoutDate: new Date().toISOString(),
           }))
     );
@@ -84,7 +74,7 @@ export default function ProgramScreen() {
         Alert.alert('Success', 'Workout logged successfully!');
         setLogState({});
         markNeedsRefresh();
-        router.push('/(tabs)/training');
+        router.push({pathname: '/training'});
 
     } catch (err) {
         console.error(err);
@@ -126,19 +116,22 @@ export default function ProgramScreen() {
 
             <Text style={styles.subtitle}>Current Day: {data.currentDay}</Text>
 
-            {currentDayData?.exercises.map((exercise) => {
-                const sets = logState[exercise.programExerciseId] || [];
+            {currentDayData?.exercises
+                .filter((exercise): exercise is ProgramExercise & { programExerciseId: number } => 
+                    exercise.programExerciseId !== undefined)
+                .map((exercise) => {
+                    const sets = logState[exercise.programExerciseId] || [];
 
-                return (
-                    <WorkoutLogCard
-                        key={exercise.programExerciseId}
-                        exercise={exercise}
-                        sets={sets}
-                        onSetChange={(setIndex, field, value) =>
-                            handleSetChange(exercise.programExerciseId, setIndex, field, value)
-                        }
-                    />
-                );
+                    return (
+                        <WorkoutLogCard
+                            key={exercise.programExerciseId}
+                            exercise={exercise}
+                            sets={sets}
+                            onSetChange={(setIndex, field, value) =>
+                                handleSetChange(exercise.programExerciseId, setIndex, field, value)
+                            }
+                        />
+                    );
         })}
 
         <Button

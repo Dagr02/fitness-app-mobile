@@ -7,6 +7,19 @@ import api from "@/config/api"
 import { useProgram } from '@/components/providers/ProgramProvider';
 import { convertProgramDataToCreateProgramDTO } from '@/utils/apiConverter';
 
+type DayExercise = {
+  exerciseId: number;
+  exerciseName: string;
+  sets: number;
+  reps: number;
+  weightUsed?: number;
+};
+
+type DayData = {
+  dayNumber: number;
+  exercises: DayExercise[];
+};
+
 export default function ProgramAddDetailsScreen() {
   const { data } = useProgram();
   const router = useRouter();
@@ -19,7 +32,7 @@ export default function ProgramAddDetailsScreen() {
 
           console.log('Program created successfully:', response);
 
-          router.push('/(tabs)/training');
+          router.push('/training');
       }catch(err){
           console.error('Failed to create program', err);
           alert("Failed to create program.");

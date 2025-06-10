@@ -1,12 +1,25 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, GestureResponderEvent } from 'react-native';
+import ProgramMenu from './ProgramMenu';
+import { ProgramData } from '../providers/ProgramProvider';
 
-export default function ProgramCard({ program, onPress }) {
+type ProgramCardProps = {
+  program: ProgramData;
+  onPress: (event: GestureResponderEvent) => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
+};
+
+export default function ProgramCard({ program, onPress, onEdit, onDelete }: ProgramCardProps) {
   const { name, description } = program.program;
   const exercises = program.days?.[program.currentDay - 1]?.exercises ?? [];
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.card}>
+      <View style={styles.menuContainer}>
+          <ProgramMenu onEdit={onEdit} onDelete={onDelete} />
+      </View>
+
       <Text style={styles.programName}>{name}</Text>
       <Text style={styles.description} numberOfLines={2}>
             {description || 'No description available.'}
@@ -34,6 +47,7 @@ export default function ProgramCard({ program, onPress }) {
 
 const styles = StyleSheet.create({
   card: {
+    position: 'relative',
     backgroundColor: '#1e1e1e',
     borderRadius: 16,
     padding: 16,
@@ -88,5 +102,11 @@ const styles = StyleSheet.create({
     marginTop: 14,
     textAlign: 'right',
     fontSize: 14,
+  },
+  menuContainer: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    zIndex: 10,
   },
 });

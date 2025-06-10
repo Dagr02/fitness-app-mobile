@@ -1,26 +1,27 @@
-import React, {createContext, useContext, useState, ReactNode} from 'react';
+import React, {createContext, useContext, useState, ReactNode, useCallback} from 'react';
 
-type ProgramExercise = {
+export type ProgramExercise = {
     exerciseId: number;
-    programExerciseId: number;
+    programExerciseId?: number;
     exerciseName: string;
     sets: number;
     reps: number;
     orderIndex: number;
-    dayNumber: number;
+    dayNumber?: number;
     completedSets?: number;
     completedReps?: number;
     weightUsed?: number;
     workoutDate?: string;
 };
 
-type ProgramDay = {
+export type ProgramDay = {
     dayNumber: number;
     exercises: ProgramExercise[];
 };
 
-type ProgramData = {
+export type ProgramData = {
     program: {
+        id: number;
         name: string;
         description: string;
         startDate: string;
@@ -46,6 +47,7 @@ type ProgramContextType = {
 
 const defaultData: ProgramData = {
     program: {
+        id: 0,
         name: '',
         description: '',
         startDate: new Date().toISOString(),
@@ -89,8 +91,8 @@ export const ProgramProvider = ({children} : {children: ReactNode}) => {
 
    const resetData = () => setData(defaultData);
 
-   const markNeedsRefresh = () => setNeedsRefresh(true);
-   const clearNeedsRefresh = () => setNeedsRefresh(false);
+   const markNeedsRefresh = useCallback(() => setNeedsRefresh(true), []);
+   const clearNeedsRefresh = useCallback(() => setNeedsRefresh(false), []);
 
    return (
        <ProgramContext.Provider value ={{data, updateData, resetData, needsRefresh, markNeedsRefresh, clearNeedsRefresh}}>

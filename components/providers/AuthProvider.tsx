@@ -20,7 +20,7 @@ export function useAuthSession(){
 }
 
 export default function AuthProvider ({children}: {children : ReactNode}): ReactNode {
-    const tokenRef = useRef<String|null>(null);
+    const tokenRef = useRef<string|null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {

@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BASE_URL = 'http://192.168.1.6:9090';
 
-const fetchData = async (endpoint) => {
+const fetchData = async (endpoint: string) => {
     const jwtToken = await AsyncStorage.getItem('@token');
     console.log("JWT TOKEN: ", jwtToken);
     try{
@@ -29,7 +29,7 @@ const fetchData = async (endpoint) => {
 
 };
 
-const postData = async (endpoint, body) => {
+const postData = async (endpoint: string, body: unknown) => {
     const jwtToken = await AsyncStorage.getItem('@token');
     try {
         const response = await fetch(`${BASE_URL}${endpoint}`, {
@@ -42,6 +42,10 @@ const postData = async (endpoint, body) => {
         });
         if (!response.ok) {
             throw new Error('Data post request not ok.');
+        }
+
+        if (response.status === 404) {
+            return null;
         }
 
         const text = await response.text();
@@ -66,6 +70,10 @@ const deleteData = async (endpoint: string) => {
 
         if (!response.ok) {
             throw new Error('Data delete request not ok.');
+        }
+
+        if (response.status === 204) {
+            return null;
         }
 
         const text = await response.text();
