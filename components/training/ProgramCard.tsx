@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, GestureResponderEvent } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, GestureResponderEvent } from 'react-native';
+import { Text } from 'react-native-paper';
 import ProgramMenu from './ProgramMenu';
 import { ProgramData } from '../providers/ProgramProvider';
 
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
   subTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#ffd33d',
+    color: '#fff',
     marginTop: 12,
     marginBottom: 8,
   },
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
   viewMore: {
-    color: '#ffd33d',
+    color: '#fff',
     fontWeight: '600',
     marginTop: 14,
     textAlign: 'right',

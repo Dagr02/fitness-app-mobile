@@ -4,7 +4,7 @@ import {createContext, MutableRefObject, ReactNode, useCallback, useContext, use
 
 
 const AuthContext = createContext<{
-        signIn: (arg0: string) => void;
+        signIn: (token: string, refreshToken: string) => void;
         signOut: () => void
         token: MutableRefObject<string | null> | null;
         isLoading: boolean
@@ -31,14 +31,17 @@ export default function AuthProvider ({children}: {children : ReactNode}): React
         })()
     }, []);
 
-     const signIn = useCallback(async (token: string) => {
+     const signIn = useCallback(async (token: string, refreshToken: string) => {
+      
         await AsyncStorage.setItem('@token', token);
+        await AsyncStorage.setItem('@refreshToken', refreshToken);
         tokenRef.current = token;
         router.replace('/')
       }, []);
 
      const signOut = useCallback(async () => {
-        await AsyncStorage.setItem('@token', '');
+        await AsyncStorage.multiRemove(['@token', '@refreshToken']);
+
         tokenRef.current = null;
         router.replace('/login');
      }, []);

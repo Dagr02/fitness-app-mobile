@@ -1,50 +1,61 @@
-# Welcome to your Expo app 👋
+# Fitness App 
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Just a basic starter React Native app built with expo for creating training programs, exercises and tracking workouts.
 
-## Get started
+---
 
-1. Install dependencies
+##  Features
 
+- User registration and login
+- Token-based authentication along with refresh token
+- Workout tracking
+
+---
+
+## Preview
+
+### Create Program Flow
+<video src="assets/createflow-2x.mp4" width="320" autoplay loop muted controls></video>
+
+### Dashboard
+<video src="assets/dashboard-2x.mp4" width="320" autoplay loop muted controls></video>
+
+###  Screenshots
+
+<table>
+  <tr>
+    <td><img src="assets/login.png" width="200"/></td>
+    <td><img src="assets/register.png" width="200"/></td>
+    <td><img src="assets/workoutScreen.png" width="200"/></td>
+  </tr>
+</table>
+
+---
+
+##  To try out:
+
+1. Clone the repo
+
+   ```bash
+   git clone https://github.com/Dagr02/fitness-app-mobile
+   cd fitness-app-mobile
+
+2. Make sure you have nodejs, then install dependancies:
    ```bash
    npm install
-   ```
 
-2. Start the app
-
+3. Start the development server:
    ```bash
-    npx expo start
-   ```
+   npx expo start
 
-In the output, you'll find options to open the app in a
+4. Launch the app via [Android Studio Emulator](https://developer.android.com/studio) or your physical device using [Expo Go](https://expo.dev/go)
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Prerequisites
 
-## Get a fresh project
+- Make sure to have Node-Js and Expo CLI installed. 
+   ```bash
+   npm install -g expo-cli
 
-When you're ready, run:
 
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+---

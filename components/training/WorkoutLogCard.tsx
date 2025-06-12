@@ -7,6 +7,7 @@ type WorkoutLogCardProps = {
         exerciseName: string;
         sets: number;
         reps: number;
+        weightUsed?: number;
     };
     sets: { reps?: string; weight?: string }[];
     onSetChange: (setIndex: number, field: 'reps' | 'weight', value: string) => void;
@@ -16,7 +17,7 @@ export default function WorkoutLogCard({ exercise, sets, onSetChange }: WorkoutL
     return (
         <View style={styles.card}>
             <Text style={styles.name}>{exercise.exerciseName}</Text>
-            <Text style={styles.target}>Target: {exercise.sets} sets × {exercise.reps} reps</Text>
+            <Text style={styles.target}>Target: {exercise.sets} sets × {exercise.reps} reps x {exercise.weightUsed ?? 0} weight</Text>
 
             {[...Array(exercise.sets)].map((_, index) => (
                 <View key={index} style={styles.setRow}>

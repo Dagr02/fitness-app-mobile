@@ -1,40 +1,40 @@
 import { useRouter } from 'expo-router';
 import React, { useState, useCallback } from 'react';
-import { View, Text, ScrollView, StyleSheet, TextInput, Button, Alert } from 'react-native';
+import { View, ScrollView, StyleSheet, Alert } from 'react-native';
+import { Text, TextInput, Button, } from 'react-native-paper';
 import { ProgramExercise, useProgram } from '@/components/providers/ProgramProvider';
 
 
 import api from '@/config/api';
 import WorkoutLogCard from '@/components/training/WorkoutLogCard';
 import ProgramMenu from '@/components/training/ProgramMenu';
-import CustomButton from '@/components/custom/CustomButton'
 import { useProgramActions } from '@/app/hooks/use-program-actions';
 
 type SetLog = {
-  reps?: string;   // or number, depending on what you store
-  weight?: string; // or number
-  [key: string]: any; // to allow other fields if needed
+    reps?: string;   // or number, depending on what you store
+    weight?: string; // or number
+    [key: string]: any; // to allow other fields if needed
 };
 
 
 export default function ProgramScreen() {
-  const { data, markNeedsRefresh } = useProgram();
-  const router = useRouter();
+    const { data, markNeedsRefresh } = useProgram();
+    const router = useRouter();
 
-  const [logState, setLogState] = useState<{[exerciseId: number]: SetLog[]}>({});
-  const [submitting, setSubmitting] = useState(false);
+    const [logState, setLogState] = useState<{ [exerciseId: number]: SetLog[] }>({});
+    const [submitting, setSubmitting] = useState(false);
 
-  const {handleDeleteProgram, handleEditProgram} = useProgramActions(
-    data.program.id, markNeedsRefresh);
+    const { handleDeleteProgram, handleEditProgram } = useProgramActions(
+        data, markNeedsRefresh);
 
 
-  const handleSetChange = useCallback((
-        exerciseId: number, 
-        setIndex: number, 
-        field: string, 
+    const handleSetChange = useCallback((
+        exerciseId: number,
+        setIndex: number,
+        field: string,
         value: string | number,
     ) => {
-      setLogState(prev => {
+        setLogState(prev => {
             const existingSets = prev[exerciseId] || [];
             const updatedSets = [...existingSets];
             updatedSets[setIndex] = {
@@ -45,11 +45,11 @@ export default function ProgramScreen() {
                 ...prev,
                 [exerciseId]: updatedSets,
             };
-      });
-  },[]);
+        });
+    }, []);
 
-  const submitAllLogs = useCallback(async () => {
-    const logEntries = Object.entries(logState).flatMap(([exerciseId, sets]) =>
+    const submitAllLogs = useCallback(async () => {
+        const logEntries = Object.entries(logState).flatMap(([exerciseId, sets]) =>
             sets
                 .filter(s => s.reps && s.weight)
                 .map((set, i) => ({
@@ -58,58 +58,62 @@ export default function ProgramScreen() {
                     completedReps: parseInt(set.reps ?? '0'),
                     weightUsed: parseFloat(set.weight ?? '0'),
                     workoutDate: new Date().toISOString(),
-          }))
-    );
+                }))
+        );
 
-    if (logEntries.length === 0) {
-        Alert.alert('No logs', 'Please fill in at least one exercise log before submitting.');
-        return;
-    }
+        if (logEntries.length === 0) {
+            Alert.alert('No logs', 'Please fill in at least one exercise log before submitting.');
+            return;
+        }
 
-    try {
-        setSubmitting(true);
+        try {
+            setSubmitting(true);
 
-        const response = await api.postData('/users/log-workout', logEntries);
+            const response = await api.postData('/users/log-workout', logEntries);
 
-        Alert.alert('Success', 'Workout logged successfully!');
-        setLogState({});
-        markNeedsRefresh();
-        router.push({pathname: '/training'});
+            Alert.alert('Success', 'Workout logged successfully!');
+            setLogState({});
+            markNeedsRefresh();
+            router.push({ pathname: '/training' });
 
-    } catch (err) {
-        console.error(err);
-        Alert.alert('Error', 'Failed to submit logs. Please try again.');
-    } finally {
-        setSubmitting(false);
+        } catch (err) {
+            console.error(err);
+            Alert.alert('Error', 'Failed to submit logs. Please try again.');
+        } finally {
+            setSubmitting(false);
 
-    }
-  }, [logState, markNeedsRefresh, router]);
+        }
+    }, [logState, markNeedsRefresh, router]);
 
-  if (!data.program.name?.trim()) {
+    if (!data.program.name?.trim()) {
         return (
             <View style={styles.center}>
                 <Text style={styles.text}>No active program available.</Text>
-                <Button title="Back" onPress={() => router.back()} />
+                <Button mode='contained' onPress={() => router.back()} > Back </Button>
             </View>
         );
-  }
+    }
 
-  const currentDayData = data.days.find(day => day.dayNumber === data.currentDay);
+    const currentDayData = data.days.find(day => day.dayNumber === data.currentDay);
 
-  return (
-      <ScrollView contentContainerStyle={styles.scrollContent} style={styles.container}>
+    return (
+        <ScrollView contentContainerStyle={styles.scrollContent} style={styles.container}>
             <View style={styles.headerContainer}>
-                <CustomButton onPress={() => router.back()} />
+                <Button mode='contained' style={styles.backButton} onPress={() => router.back()}> Back </Button>
                 <Text
+                    variant="bodyLarge"
                     style={styles.title}
                     accessible={true}
                     accessibilityRole="header"
                     accessibilityLabel={`Program Title: ${data.program.name}`}
-                    >
+                >
                     {data.program.name}
                 </Text>
                 <View style={styles.menuContainer}>
-                    <ProgramMenu onDelete={handleDeleteProgram} />
+                    <ProgramMenu
+                        onDelete={handleDeleteProgram}
+                        onEdit={handleEditProgram}
+                    />
                 </View>
             </View>
 
@@ -117,7 +121,7 @@ export default function ProgramScreen() {
             <Text style={styles.subtitle}>Current Day: {data.currentDay}</Text>
 
             {currentDayData?.exercises
-                .filter((exercise): exercise is ProgramExercise & { programExerciseId: number } => 
+                .filter((exercise): exercise is ProgramExercise & { programExerciseId: number } =>
                     exercise.programExerciseId !== undefined)
                 .map((exercise) => {
                     const sets = logState[exercise.programExerciseId] || [];
@@ -132,15 +136,20 @@ export default function ProgramScreen() {
                             }
                         />
                     );
-        })}
+                })}
 
-        <Button
-          title={submitting ? 'Submitting...' : 'Submit Workout'}
-          onPress={submitAllLogs}
-          disabled={submitting}
-        />
-      </ScrollView>
-  );
+            <Button
+                mode="contained"
+                onPress={submitAllLogs}
+                disabled={submitting}
+                loading={submitting}
+                style={{ marginTop: 20 }}
+            >
+                {submitting ? 'Submitting...' : 'Submit Workout'}
+            </Button>
+
+        </ScrollView>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -162,39 +171,32 @@ const styles = StyleSheet.create({
         color: '#fff',
     },
     headerContainer: {
-        height: 48,
-        position: 'relative',
-        marginBottom: 8,
-        justifyContent: 'center',
+        backgroundColor: '#333',
+        flexDirection: 'row',
         alignItems: 'center',
+        height: 56,
+        paddingHorizontal: 8,
+        marginBottom: 8,
+        position: 'relative',
+        justifyContent: 'space-between', 
     },
-
     backButton: {
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        bottom: 0,
-        paddingHorizontal: 12,
-        justifyContent: 'center',
-        backgroundColor: '#444',
-        borderRadius: 6,
+        marginRight: 8,
     },
     backButtonText: {
         color: '#fff',
         fontWeight: '600',
     },
     title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#ffd33d',
+        color: '#fff',
         textAlign: 'center',
+        flex: 1,
+        maxWidth: '40%',
     },
     menuContainer: {
-        position: 'absolute',
-        right: 0,
-        top: 0,
-        bottom: 0,
-        justifyContent: 'center',
+        marginLeft: 8,
+        flexShrink: 0,
+        alignItems: 'center',
     },
     description: {
         color: '#fff',

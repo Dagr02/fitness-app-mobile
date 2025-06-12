@@ -23,7 +23,7 @@ export default function ProgramMenu({ onEdit, onDelete } : ProgramMenuProps) {
     };
 
     return (
-        <View style={{ position: 'absolute', top: 10, right: 10 }}>
+        <View>
             <TouchableOpacity 
                 ref={menuButtonRef}
                 onPress={(e) => {
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     menuItem: {
-        color: '#ffd33d',
+        color: '#fff',
         paddingVertical: 8,
         fontSize: 16,
     },
@@ -96,10 +96,6 @@ const styles = StyleSheet.create({
         width: 150,
     },
     menuButton: {
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        zIndex: 20,
         padding: 6,
     },
     

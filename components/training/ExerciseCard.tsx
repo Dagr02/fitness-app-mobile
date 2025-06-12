@@ -1,6 +1,5 @@
 import React from 'react';
-import { Button, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 type Exercise = {
   id?: number;
@@ -13,9 +12,10 @@ type Exercise = {
 type Props = {
   exercise: Exercise;
   onEdit?: (id?: number) => void;
+  onDelete?: (id?: number) => void;
 };
 
-export default function ExerciseCard({ exercise, onEdit }: Props) {
+export default function ExerciseCard({ exercise, onEdit, onDelete }: Props) {
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
@@ -26,7 +26,12 @@ export default function ExerciseCard({ exercise, onEdit }: Props) {
       </View>
       {onEdit && (
         <TouchableOpacity style={styles.editIcon} onPress={() => onEdit(exercise.id)}>
-          <Icon name="pencil" size={18} color="#ffd33d" />
+          Edit
+        </TouchableOpacity>
+      )}
+      {onDelete && (
+        <TouchableOpacity style={styles.editIcon} onPress={() => onDelete(exercise.id)}>
+          Delete
         </TouchableOpacity>
       )}
     </View>

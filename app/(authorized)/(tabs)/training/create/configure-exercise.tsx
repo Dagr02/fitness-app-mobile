@@ -1,68 +1,71 @@
-import {useLocalSearchParams, useRouter} from 'expo-router';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { useProgram } from '@/components/providers/ProgramProvider';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { View, StyleSheet } from 'react-native';
+import { Text, TextInput, Button } from 'react-native-paper';
+
+import { useDraftProgram } from '@/components/providers/DraftProgramProvider'; // <-- use draft
 import { useState } from 'react';
 
-
 export default function ConfigureExerciseScreen() {
-    const {id, day} = useLocalSearchParams<{id: string, day: string}>();
+    const { id, day } = useLocalSearchParams<{ id: string, day: string }>();
     const dayIndex = parseInt(day || '0');
-    const {data, updateData} = useProgram();
+    const { draft, setDraft } = useDraftProgram(); // <-- use draft
     const router = useRouter();
 
-    const exercise = data.days[dayIndex]?.exercises.find((e) => e.exerciseId.toString() === id);
+    const exercise = draft.days?.[dayIndex]?.exercises.find((e) => e.exerciseId.toString() === id);
 
-    const [reps, setReps] = useState(exercise.reps || 0);
-    const [sets, setSets] = useState(exercise.sets || 0);
-    const [weight, setWeight] = useState(exercise.sets || 0);
+    const [reps, setReps] = useState(exercise?.reps || 0);
+    const [sets, setSets] = useState(exercise?.sets || 0);
+    const [weight, setWeight] = useState(exercise?.weightUsed || 0);
 
     if (!exercise) {
         return <Text style={{ color: 'white', padding: 20 }}>Exercise not found</Text>;
     }
 
     const handleSave = () => {
-        const updatedDays = [...data.days];
+        if (!draft.days) return;
+        const updatedDays = [...draft.days];
         const exercises = updatedDays[dayIndex].exercises.map((e) =>
-          e.exerciseId.toString() === id ? { ...e, sets, reps, weightUsed: weight} : e
+            e.exerciseId.toString() === id ? { ...e, sets, reps, weightUsed: weight } : e
         );
-
         updatedDays[dayIndex].exercises = exercises;
-        updateData({ days: updatedDays });
+        setDraft({ days: updatedDays }); // <-- update draft
         router.back();
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>Configure {exercise.name}</Text>
+            <Text variant='headlineMedium' style={styles.header}>Configure: {exercise.exerciseName}</Text>
 
-            <Text style={styles.label}>Sets:</Text>
+            <Text variant='headlineSmall' style={styles.label}>Sets:</Text>
             <TextInput
                 style={styles.input}
                 keyboardType="number-pad"
+                mode='outlined'
                 value={sets.toString()}
                 onChangeText={(text) => setSets(Number(text))}
             />
 
-            <Text style={styles.label}>Reps:</Text>
+            <Text variant='headlineSmall' style={styles.label}>Reps:</Text>
             <TextInput
                 style={styles.input}
                 keyboardType="number-pad"
+                mode='outlined'
                 value={reps.toString()}
                 onChangeText={(text) => setReps(Number(text))}
             />
 
-            <Text style={styles.label}>Weight:</Text>
+            <Text variant='headlineSmall' style={styles.label}>Weight:</Text>
             <TextInput
                 style={styles.input}
                 keyboardType="number-pad"
+                mode='outlined'
                 value={weight.toString()}
                 onChangeText={(text) => setWeight(Number(text))}
             />
 
-            <Button title="Save" onPress={handleSave} />
+            <Button mode='contained' onPress={handleSave} > Save </Button>
         </View>
     );
-
 }
 
 const styles = StyleSheet.create({
@@ -72,20 +75,14 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     header: {
-        fontSize: 22,
-        fontWeight: 'bold',
-        color: '#ffd33d',
+        color: '#fff',
         marginBottom: 20,
     },
     label: {
         color: '#fff',
-        marginBottom: 5,
+        marginBottom: 10,
     },
     input: {
-        backgroundColor: '#333',
-        color: '#fff',
-        padding: 10,
         marginBottom: 20,
-        borderRadius: 8,
     },
 });

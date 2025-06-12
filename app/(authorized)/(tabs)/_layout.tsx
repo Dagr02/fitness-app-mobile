@@ -9,6 +9,7 @@ export default function TabLayout() {
                 headerStyle: {
                     backgroundColor: '#25292e'
                 },
+                headerShown: false,
                 headerShadowVisible: true,
                 headerTintColor: '#fff',
                 tabBarStyle: {
@@ -30,14 +31,6 @@ export default function TabLayout() {
                         <Ionicons name={focused ? 'barbell-sharp' : 'barbell-outline'} color={color} size={24} />
                     ),
 
-                }}
-            />
-
-            <Tabs.Screen name="profile" options={{
-                    title: 'Profile',
-                    tabBarIcon: ({color, focused}) => (
-                        <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color={color} size={24} />
-                    ),
                 }}
             />
         </Tabs>
