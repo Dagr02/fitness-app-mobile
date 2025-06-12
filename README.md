@@ -34,7 +34,7 @@ Just a basic starter React Native app built with expo for creating training prog
 
 ##  To try out:
 
-1. Clone the repo
+1. Clone this repo and the [back-end]()
 
    ```bash
    git clone https://github.com/Dagr02/fitness-app-mobile
