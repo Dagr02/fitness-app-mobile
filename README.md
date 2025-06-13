@@ -16,11 +16,11 @@ Just a basic starter React Native app built with expo for creating training prog
 
 ### Create Program Flow
 <video src="assets/createflow-2x.mp4" width="320" autoplay loop muted controls></video>
-[Watch demo on Youtube]([Watch demo on YouTube](https://youtu.be/3mwuLC7Ln_M?si=qT2uUxDNy3pmunlj)
+[Watch demo on YouTube](https://youtu.be/3mwuLC7Ln_M?si=qT2uUxDNy3pmunlj)
 
 ### Dashboard
 <video src="assets/dashboard-2x.mp4" width="320" autoplay loop muted controls></video>
-[Watch demo on Youtube]([Watch demo on YouTube](https://youtu.be/Cb_PgN6viSA?si=1dkG9obLdrnQ6An3)
+[Watch demo on YouTube](https://youtu.be/Cb_PgN6viSA?si=1dkG9obLdrnQ6An3)
 
 
 ###  Screenshots
